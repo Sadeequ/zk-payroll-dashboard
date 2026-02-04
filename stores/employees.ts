@@ -1,0 +1,53 @@
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+export interface Employee {
+  id: string;
+  address: string;
+  name: string;
+  email?: string;
+  department?: string;
+  salary: number;
+  salaryCommitment: string;
+  isActive: boolean;
+  startDate: string;
+  lastPayment?: string;
+}
+
+interface EmployeeState {
+  employees: Employee[];
+  isLoading: boolean;
+  addEmployee: (employee: Employee) => void;
+  updateEmployee: (id: string, updates: Partial<Employee>) => void;
+  removeEmployee: (id: string) => void;
+  setEmployees: (employees: Employee[]) => void;
+}
+
+export const useEmployeeStore = create<EmployeeState>()(
+  persist(
+    (set) => ({
+      employees: [],
+      isLoading: false,
+
+      addEmployee: (employee) =>
+        set((state) => ({
+          employees: [...state.employees, employee],
+        })),
+
+      updateEmployee: (id, updates) =>
+        set((state) => ({
+          employees: state.employees.map((e) =>
+            e.id === id ? { ...e, ...updates } : e
+          ),
+        })),
+
+      removeEmployee: (id) =>
+        set((state) => ({
+          employees: state.employees.filter((e) => e.id !== id),
+        })),
+
+      setEmployees: (employees) => set({ employees }),
+    }),
+    { name: 'zk-payroll-employees' }
+  )
+);
