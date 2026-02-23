@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { StellarProvider } from "@/components/providers/StellarProvider";
 
 export const metadata: Metadata = {
   title: "ZK Payroll Dashboard",
@@ -13,7 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <StellarProvider>
+          {children}
+        </StellarProvider>
+      </body>
     </html>
   );
 }
